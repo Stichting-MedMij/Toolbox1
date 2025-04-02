@@ -19,7 +19,7 @@ participant e as EPD
 participant zap as Zorgaanbiedersportaal
 %% participant Moduleaanbieder as ma
 
-box DVA
+box rgb(33,66,99) DVA
     participant dfs as DVA FHIR server
     participant des as DVA email service
     participant dmd as DVA moduledienst
