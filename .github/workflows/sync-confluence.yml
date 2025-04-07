@@ -1,0 +1,39 @@
+name: Sync Confluence pages
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'docs/**'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          sparse-checkout: docs
+          sparse-checkout-cone-mode: false
+          fetch-depth: 2
+
+      - name: Get modified documents
+        working-directory: ./docs
+        run: echo "MODIFIED_FILES=`git diff HEAD^ --name-only --relative=docs | xargs`" >> $GITHUB_ENV
+
+      - name: Move doc files to the root and delete the docs folder
+        run: |
+          mv docs/* .
+          rm -rf docs
+
+      - name: Wiki Sync
+        uses: talkiq/confluence-wiki-sync@v1
+        with:
+          wiki-base-url: https://medmij.atlassian.net
+          user: j.maijenburg@medmij.nl
+          token: ${{ secrets.CONFLUENCE_API_KEY }}
+          modified-files: ${{ env.MODIFIED_FILES }}
+          space-name: Toolbox1
+          root-page-title: Toolbox 1
