@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - master
-    paths:
-      - 'docs/**'
 
 jobs:
   sync:
@@ -20,8 +18,7 @@ jobs:
           fetch-depth: 2
 
       - name: Get modified documents
-        working-directory: ./docs
-        run: echo "MODIFIED_FILES=`git diff HEAD^ --name-only --relative=docs | xargs`" >> $GITHUB_ENV
+        run: echo "MODIFIED_FILES=`git diff HEAD^ --name-only --relative=docs ./docs | xargs`" >> $GITHUB_ENV
 
       - name: Move doc files to the root and delete the docs folder
         run: |
@@ -36,4 +33,4 @@ jobs:
           token: ${{ secrets.CONFLUENCE_API_KEY }}
           modified-files: ${{ env.MODIFIED_FILES }}
           space-name: Toolbox1
-          root-page-title: Toolbox 1
+          root-page-title: Solution designs
