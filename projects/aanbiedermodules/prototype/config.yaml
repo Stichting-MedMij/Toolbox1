@@ -1,0 +1,5 @@
+stelselnode:
+  url: https://stelselnode.medmij.nl
+  auth:
+    cert:
+    key:
